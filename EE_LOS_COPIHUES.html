@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a3d62">
+<meta name="description" content="94 Establecimientos Educacionales SLEP Los Copihues">
+<title>EE Los Copihues</title>
+
+<!-- PWA Manifest inline -->
+<script>
+const manifestData = {
+  name: "EE Los Copihues",
+  short_name: "EE Copihues",
+  description: "94 Establecimientos Educacionales SLEP Los Copihues",
+  start_url: "./",
+  display: "standalone",
+  background_color: "#0a3d62",
+  theme_color: "#0a3d62",
+  orientation: "portrait",
+  icons: [
+    { src: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='32' fill='%230a3d62'/><text y='130' x='96' text-anchor='middle' font-size='110'>🏫</text></svg>", sizes: "192x192", type: "image/svg+xml" },
+    { src: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='80' fill='%230a3d62'/><text y='360' x='256' text-anchor='middle' font-size='300'>🏫</text></svg>", sizes: "512x512", type: "image/svg+xml" }
+  ]
+};
+const blob = new Blob([JSON.stringify(manifestData)], {type: 'application/json'});
+const manifestURL = URL.createObjectURL(blob);
+document.write('<link rel="manifest" href="' + manifestURL + '">');
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --azul: #0a3d62; --azul-mid: #1a5276; --celeste: #2e86c1;
+    --acento: #f39c12; --acento2: #e67e22;
+    --fondo: #f0f4f8; --blanco: #ffffff; --gris: #8395a7;
+    --gris-claro: #dde1e7; --texto: #1a2535;
+    --sombra: 0 4px 24px rgba(10,61,98,0.10); --radio: 16px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--fondo); color: var(--texto); min-height: 100vh; }
+
+  /* Banner de instalación */
+  #installBanner {
+    display: none;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+    padding: 12px 16px;
+    align-items: center; gap: 10px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    animation: slideDown 0.4s ease;
+  }
+  #installBanner.visible { display: flex; }
+  @keyframes slideDown { from{transform:translateY(-100%)} to{transform:translateY(0)} }
+  .install-icon { font-size: 24px; flex-shrink: 0; }
+  .install-text { flex: 1; }
+  .install-text strong { display: block; font-family: 'Outfit', sans-serif; font-size: 13px; font-weight: 700; color: white; }
+  .install-text span { font-size: 11px; color: rgba(255,255,255,0.85); }
+  .install-btn { background: white; color: var(--acento2); border: none; border-radius: 20px; padding: 7px 14px; font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; flex-shrink: 0; }
+  .install-close { background: none; border: none; color: white; font-size: 18px; cursor: pointer; padding: 4px; flex-shrink: 0; }
+
+  header {
+    background: linear-gradient(135deg, var(--azul) 0%, var(--azul-mid) 60%, var(--celeste) 100%);
+    padding: 28px 20px 80px; position: relative; overflow: hidden;
+  }
+  header::before { content:''; position:absolute; top:-40px; right:-40px; width:200px; height:200px; border-radius:50%; background:rgba(255,255,255,0.05); }
+  header::after  { content:''; position:absolute; bottom:-60px; left:-20px; width:160px; height:160px; border-radius:50%; background:rgba(243,156,18,0.12); }
+  .header-icon { width:48px; height:48px; background:var(--acento); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:24px; margin-bottom:14px; box-shadow:0 4px 14px rgba(243,156,18,0.4); }
+  header h1 { font-family:'Outfit',sans-serif; font-size:22px; font-weight:800; color:white; line-height:1.2; }
+  header p  { color:rgba(255,255,255,0.7); font-size:13px; margin-top:5px; }
+
+  .search-card { background:var(--blanco); border-radius:var(--radio); box-shadow:var(--sombra); margin:-48px 16px 0; padding:18px 16px 14px; position:relative; z-index:10; }
+  .search-label { font-family:'Outfit',sans-serif; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px; color:var(--gris); margin-bottom:8px; display:block; }
+  .search-wrap { position:relative; }
+  .search-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); font-size:17px; color:var(--celeste); pointer-events:none; }
+  input[type="text"] { width:100%; padding:12px 12px 12px 40px; border:2px solid var(--gris-claro); border-radius:12px; font-family:'DM Sans',sans-serif; font-size:15px; color:var(--texto); background:var(--fondo); outline:none; transition:border-color 0.2s,box-shadow 0.2s; }
+  input[type="text"]:focus { border-color:var(--celeste); box-shadow:0 0 0 3px rgba(46,134,193,0.15); background:white; }
+  input::placeholder { color:var(--gris); font-size:14px; }
+  .clear-btn { position:absolute; right:10px; top:50%; transform:translateY(-50%); background:var(--gris-claro); border:none; border-radius:50%; width:24px; height:24px; cursor:pointer; font-size:13px; color:var(--gris); display:none; align-items:center; justify-content:center; }
+  .clear-btn.visible { display:flex; }
+
+  .filtros-section { padding:14px 16px 0; }
+  .filtros-titulo { font-family:'Outfit',sans-serif; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--gris); margin-bottom:8px; }
+  .filter-row { display:flex; gap:7px; overflow-x:auto; scrollbar-width:none; padding-bottom:2px; }
+  .filter-row::-webkit-scrollbar { display:none; }
+  .chip { flex-shrink:0; padding:6px 12px; border-radius:20px; font-family:'Outfit',sans-serif; font-size:11.5px; font-weight:600; cursor:pointer; border:2px solid var(--gris-claro); background:transparent; color:var(--gris); transition:all 0.18s; }
+  .chip.active { background:var(--azul); border-color:var(--azul); color:white; }
+  .chip:hover:not(.active) { border-color:var(--celeste); color:var(--celeste); }
+  .chip.comuna.active { background:#1e8449; border-color:#1e8449; }
+  .chip.comuna:hover:not(.active) { border-color:#27ae60; color:#27ae60; }
+
+  .divider { height:1px; background:var(--gris-claro); margin:12px 16px 0; }
+  .results-bar { display:flex; align-items:center; justify-content:space-between; padding:12px 16px 6px; }
+  .results-count { font-family:'Outfit',sans-serif; font-size:13px; font-weight:700; color:var(--azul); }
+  .results-count span { color:var(--celeste); font-size:17px; }
+  .sort-hint { font-size:11px; color:var(--gris); }
+
+  .list-container { padding:4px 16px 100px; display:flex; flex-direction:column; gap:10px; }
+
+  .card { background:var(--blanco); border-radius:var(--radio); box-shadow:0 2px 12px rgba(10,61,98,0.07); display:flex; align-items:stretch; overflow:hidden; text-decoration:none; color:var(--texto); transition:transform 0.15s; animation:slideIn 0.25s ease both; }
+  .card:active { transform:scale(0.98); }
+  @keyframes slideIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+  .card-stripe { width:5px; flex-shrink:0; }
+  .stripe-sala    { background:#9b59b6; }
+  .stripe-liceo   { background:var(--acento); }
+  .stripe-escuela { background:var(--celeste); }
+  .stripe-especial{ background:#e74c3c; }
+
+  .card-body { flex:1; padding:12px 14px; min-width:0; }
+  .card-meta { display:flex; align-items:center; gap:6px; margin-bottom:3px; flex-wrap:wrap; }
+  .card-tipo { font-family:'Outfit',sans-serif; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; }
+  .tipo-sala    { color:#9b59b6; }
+  .tipo-liceo   { color:var(--acento2); }
+  .tipo-escuela { color:var(--celeste); }
+  .tipo-especial{ color:#e74c3c; }
+  .card-comuna { font-family:'Outfit',sans-serif; font-size:9.5px; font-weight:700; text-transform:uppercase; background:#eaf4ec; color:#1e8449; padding:2px 7px; border-radius:10px; }
+  .card-nombre { font-family:'Outfit',sans-serif; font-size:13.5px; font-weight:600; line-height:1.35; color:var(--texto); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .card-arrow { display:flex; align-items:center; justify-content:center; padding:0 14px 0 8px; flex-shrink:0; }
+  .maps-btn { background:linear-gradient(135deg,var(--celeste),var(--azul-mid)); color:white; border:none; border-radius:10px; width:36px; height:36px; display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow:0 3px 10px rgba(46,134,193,0.35); cursor:pointer; text-decoration:none; }
+
+  .empty { text-align:center; padding:60px 20px; display:none; }
+  .empty.visible { display:block; }
+  .empty-emoji { font-size:50px; margin-bottom:12px; }
+  .empty h3 { font-family:'Outfit',sans-serif; font-size:17px; font-weight:700; color:var(--azul); margin-bottom:6px; }
+  .empty p { font-size:13px; color:var(--gris); }
+
+  .bottom-bar { position:fixed; bottom:0; left:0; right:0; background:rgba(255,255,255,0.95); backdrop-filter:blur(10px); border-top:1px solid var(--gris-claro); padding:10px 20px; text-align:center; font-size:11px; color:var(--gris); font-family:'Outfit',sans-serif; font-weight:500; }
+  mark { background:rgba(243,156,18,0.25); color:inherit; border-radius:3px; padding:0 1px; }
+</style>
+</head>
+<body>
+
+<!-- Banner de instalación como app -->
+<div id="installBanner">
+  <span class="install-icon">📲</span>
+  <div class="install-text">
+    <strong>Instalar como App</strong>
+    <span>Acceso rápido desde tu pantalla de inicio</span>
+  </div>
+  <button class="install-btn" id="installBtn">Instalar</button>
+  <button class="install-close" id="closeBanner">✕</button>
+</div>
+
+<header>
+  <div class="header-icon">🏫</div>
+  <h1>Establecimientos<br>Educacionales</h1>
+  <p>94 establecimientos · Los Ángeles · Cabrero · Yumbel</p>
+</header>
+
+<div class="search-card">
+  <span class="search-label">🔍 Buscar establecimiento</span>
+  <div class="search-wrap">
+    <span class="search-icon">🔎</span>
+    <input type="text" id="searchInput" placeholder="Escribe nombre o tipo…" autocomplete="off" autocorrect="off" spellcheck="false">
+    <button class="clear-btn" id="clearBtn" onclick="clearSearch()">✕</button>
+  </div>
+</div>
+
+<div class="filtros-section">
+  <div class="filtros-titulo">📍 Filtrar por comuna</div>
+  <div class="filter-row" id="filterComuna">
+    <button class="chip comuna active" onclick="setComuna('todas',this)">Todas</button>
+    <button class="chip comuna" onclick="setComuna('LOS ANGELES',this)">🏙️ Los Ángeles</button>
+    <button class="chip comuna" onclick="setComuna('CABRERO',this)">🌿 Cabrero</button>
+    <button class="chip comuna" onclick="setComuna('YUMBEL',this)">🌾 Yumbel</button>
+  </div>
+  <div style="margin-top:10px;">
+    <div class="filtros-titulo">🏷️ Filtrar por tipo</div>
+    <div class="filter-row" id="filterTipo">
+      <button class="chip active" onclick="setTipo('todos',this)">Todos</button>
+      <button class="chip" onclick="setTipo('sala',this)">🍼 Sala / Jardín</button>
+      <button class="chip" onclick="setTipo('liceo',this)">🎓 Liceos</button>
+      <button class="chip" onclick="setTipo('escuela',this)">📚 Escuelas</button>
+      <button class="chip" onclick="setTipo('especial',this)">⭐ Especial</button>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+<div class="results-bar">
+  <div class="results-count"><span id="countNum">94</span> establecimientos</div>
+  <div class="sort-hint">Toca 📍 para abrir Maps</div>
+</div>
+
+<div class="list-container" id="listContainer"></div>
+<div class="empty" id="emptyState">
+  <div class="empty-emoji">🔍</div>
+  <h3>Sin resultados</h3>
+  <p>Intenta con otro nombre o cambia los filtros</p>
+</div>
+<div class="bottom-bar">📍 Los links abren Google Maps directamente</div>
+
+<script>
+const DATA = [
+  ["EE - SALA CUNA y JARDIN INFANTIL PALACIO DE SUEÑO","https://www.google.com/maps/search/?api=1&query=-37.467012,-72.397520","LOS ANGELES"],
+  ["EE - SALA CUNA y JARDIN INFANTIL VILLA LOS RIOS","https://www.google.com/maps/search/?api=1&query=-37.490474,-72.330926","LOS ANGELES"],
+  ["EE - SALA CUNA y JARDIN INFANTIL SEMBRANDO SUEÑOS","https://www.google.com/maps/search/?api=1&query=-37.460239,-72.381745","LOS ANGELES"],
+  ["EE - SALA CUNA y JARDIN INFANTIL RAICES DE AMOR","https://www.google.com/maps/search/?api=1&query=-37.484649,-72.212189","LOS ANGELES"],
+  ["EE - SALA CUNA y JARDIN INFANTIL MANITOS DE AMOR","https://www.google.com/maps/search/?api=1&query=-37.411443,-72.309262","LOS ANGELES"],
+  ["EE - SALA CUNA y JARDIN INFANTIL RINCONCITO DE AMOR","https://www.google.com/maps/search/?api=1&query=-37.217816,-72.352800","LOS ANGELES"],
+  ["EE - SALA CUNA y JARDIN INFANTIL TREMEMN","https://www.google.com/maps/search/?api=1&query=-37.468750,-72.364534","LOS ANGELES"],
+  ["EE - SALA CUNA y JARDIN INFANTIL PASITOS DE ESPERANZA","https://www.google.com/maps/search/?api=1&query=-37.463891,-72.364567","LOS ANGELES"],
+  ["EE - SALA CUNA y JARDIN INFANTIL ANGELITOS TRAVIESOS","https://www.google.com/maps/search/?api=1&query=-37.467536,-72.500345","LOS ANGELES"],
+  ["EE - SALA CUNA y JARDIN INFANTIL KIMELTU","https://www.google.com/maps/search/?api=1&query=-37.466623,-72.580045","LOS ANGELES"],
+  ["EE - SALA CUNA y JARDIN INFANTIL MI GRAN MUNDO","https://www.google.com/maps/search/?api=1&query=-37.484155,-72.344869","LOS ANGELES"],
+  ["EE - SALA CUNA y JARDIN INFANTIL GOTITAS DE SUEÑO","https://www.google.com/maps/search/?api=1&query=-37.488383,-72.334028","LOS ANGELES"],
+  ["EE - SALA CUNA y JARDIN INFANTIL MI LINDA GRANJA","https://www.google.com/maps/search/?api=1&query=-37.563999,-72.178733","LOS ANGELES"],
+  ["EE - LICEO COEDUCACIONAL SANTA MARÍA DE LOS ÁNGELES","https://www.google.com/maps/search/?api=1&query=-37.473093,-72.352048","LOS ANGELES"],
+  ["EE - LICEO BICENTENARIO LOS ÁNGELES","https://www.google.com/maps/search/?api=1&query=-37.472906,-72.344141","LOS ANGELES"],
+  ["EE - LICEO AGROINDUSTRIAL LLANO BLANCO","https://www.google.com/maps/search/?api=1&query=-37.563743,-72.179083","LOS ANGELES"],
+  ["EE - LICEO TECNICO BICENTENARIO JUANITA FERNANDEZ SOLAR","https://www.google.com/maps/search/?api=1&query=-37.468325,-72.365132","LOS ANGELES"],
+  ["EE - LICEO SANTA FE","https://www.google.com/maps/search/?api=1&query=-37.466635,-72.579313","LOS ANGELES"],
+  ["EE - LICEO COMERCIAL DIEGO PORTALES PALAZUELOS","https://www.google.com/maps/search/?api=1&query=-37.472734,-72.346450","LOS ANGELES"],
+  ["EE - LICEO INDUSTRIAL SAMUEL VIVANCO PARADA","https://www.google.com/maps/search/?api=1&query=-37.469887,-72.364629","LOS ANGELES"],
+  ["EE - ESCUELA ESPECIAL ESPERANZA","https://www.google.com/maps/search/?api=1&query=-37.472084,-72.349744","LOS ANGELES"],
+  ["EE - ESCUELA BASICA EL NOGAL","https://www.google.com/maps/search/?api=1&query=-37.411911,-72.308695","LOS ANGELES"],
+  ["EE - ESCUELA BASICA LA LEYENDA","https://www.google.com/maps/search/?api=1&query=-37.365400,-72.096894","LOS ANGELES"],
+  ["EE - ESCUELA BASICA LA MANCHA","https://www.google.com/maps/search/?api=1&query=-37.307909,-72.455689","LOS ANGELES"],
+  ["EE - ESCUELA BASICA LA CAPILLA","https://www.google.com/maps/search/?api=1&query=-37.390039,-72.180644","LOS ANGELES"],
+  ["EE - ESCUELA BASICA EL CHEQUEN","https://www.google.com/maps/search/?api=1&query=-37.535989,-72.569971","LOS ANGELES"],
+  ["EE - ESCUELA BASICA LAS QUINTAS","https://www.google.com/maps/search/?api=1&query=-37.422136,-72.450155","LOS ANGELES"],
+  ["EE - ESCUELA BASICA COYANCO","https://www.google.com/maps/search/?api=1&query=-37.494306,-72.533614","LOS ANGELES"],
+  ["EE - ESCUELA BÁSICA LA RINCONADA DEL SALTO","https://www.google.com/maps/search/?api=1&query=-37.217538,-72.353156","LOS ANGELES"],
+  ["EE - ESCUELA DIEGO PORTALES PALAZUELOS","https://www.google.com/maps/search/?api=1&query=-37.484747,-72.214345","LOS ANGELES"],
+  ["EE - ESCUELA BASICA MILLANTU","https://www.google.com/maps/search/?api=1&query=-37.397574,-72.619739","LOS ANGELES"],
+  ["EE - ESCUELA BASICA LOS TRONCOS","https://www.google.com/maps/search/?api=1&query=-37.276648,-72.427344","LOS ANGELES"],
+  ["EE - ESCUELA BASICA VIRQUENCO","https://www.google.com/maps/search/?api=1&query=-37.467472,-72.499517","LOS ANGELES"],
+  ["EE - ESCUELA BASICA LA AGUADA DE CUEL","https://www.google.com/maps/search/?api=1&query=-37.519650,-72.500650","LOS ANGELES"],
+  ["EE - ESCUELA BASICA 11 DE SEPTIEMBRE","https://www.google.com/maps/search/?api=1&query=-37.470041,-72.367695","LOS ANGELES"],
+  ["EE - ESCUELA CORONEL GUILLERMO MARIN CARMONA","https://www.google.com/maps/search/?api=1&query=-37.499717,-72.405192","LOS ANGELES"],
+  ["EE - ESCUELA REPUBLICA DE GRECIA","https://www.google.com/maps/search/?api=1&query=-37.467501,-72.345754","LOS ANGELES"],
+  ["EE - ESCUELA BASICA LA QUEBRADA","https://www.google.com/maps/search/?api=1&query=-37.301202,-72.215500","LOS ANGELES"],
+  ["EE - ESCUELA BASICA REPUBLICA DE ALEMANIA","https://www.google.com/maps/search/?api=1&query=-37.482603,-72.356852","LOS ANGELES"],
+  ["EE - ESCUELA ISLA DE LAJA","https://www.google.com/maps/search/?api=1&query=-37.463265,-72.365067","LOS ANGELES"],
+  ["EE - ESCUELA BASICA 21 DE MAYO","https://www.google.com/maps/search/?api=1&query=-37.487249,-72.346961","LOS ANGELES"],
+  ["EE - ESCUELA BASICA LOS MOLINOS","https://www.google.com/maps/search/?api=1&query=-37.262791,-72.184044","LOS ANGELES"],
+  ["EE - ESCUELA BASICA CHACAYAL SUR","https://www.google.com/maps/search/?api=1&query=-37.447311,-72.138824","LOS ANGELES"],
+  ["EE - ESCUELA BASICA SANTA CLARA DE CHACAYAL","https://www.google.com/maps/search/?api=1&query=-37.428966,-72.137139","LOS ANGELES"],
+  ["EE - ESCUELA BASICA REPUBLICA DE ISRAEL","https://www.google.com/maps/search/?api=1&query=-37.461760,-72.342675","LOS ANGELES"],
+  ["EE - ESCUELA ARTURO ALESSANDRI PALMA","https://www.google.com/maps/search/?api=1&query=-37.492536,-72.327369","LOS ANGELES"],
+  ["EE - ESCUELA CLARA REBOLLEDO DE GODOY","https://www.google.com/maps/search/?api=1&query=-37.454292,-72.342104","LOS ANGELES"],
+  ["EE - ESCUELA JOSE MANSO DE VELASCO","https://www.google.com/maps/search/?api=1&query=-37.472778,-72.346942","LOS ANGELES"],
+  ["EE - ESCUELA THOMAS JEFFERSON","https://www.google.com/maps/search/?api=1&query=-37.456317,-72.348845","LOS ANGELES"],
+  ["EE - ESCUELA HOGAR NIEVES VASQUEZ PALACIOS","https://www.google.com/maps/search/?api=1&query=-37.443076,-72.328671","LOS ANGELES"],
+  ["EE - ESCUELA GENERAL JOSE DE SAN MARTIN","https://www.google.com/maps/search/?api=1&query=-37.466425,-72.354969","LOS ANGELES"],
+  ["EE- ESCUELA BLANCO ENCALADA","https://www.google.com/maps/search/?api=1&query=-37.473700,-72.357466","LOS ANGELES"],
+  ["EE - ESCUELA COLONIA ARABE","https://www.google.com/maps/search/?api=1&query=-37.462223,-72.357151","LOS ANGELES"],
+  ["EE- ESCUELA ESPANA","https://www.google.com/maps/search/?api=1&query=-37.474119,-72.353180","LOS ANGELES"],
+  ["EE - ESCUELA GENERAL BERNARDO O HIGGINS","https://www.google.com/maps/search/?api=1&query=-37.466687,-72.353929","LOS ANGELES"],
+  ["EE - ESCUELA TENIENTE IGNACIO SERRANO","https://www.google.com/maps/search/?api=1&query=-37.526400,-72.201625","LOS ANGELES"],
+  ["EE - ESCUELA BASICA EL AMANECER DE DUQUECO","https://www.google.com/maps/search/?api=1&query=-37.540561,-72.311002","LOS ANGELES"],
+  ["EE - ESCUELA BÁSICA HITILHUE","https://www.google.com/maps/search/?api=1&query=-37.594444,-72.276057","LOS ANGELES"],
+  ["EE - ESCUELA PEDRO RUIZ ALDEA","https://www.google.com/maps/search/?api=1&query=-37.469072,-72.361422","LOS ANGELES"],
+  ["EE - SALA CUNA y JARDIN INFANTIL PEQUEÑOS ANGELITOS","https://www.google.com/maps/search/?api=1&query=-37.083259,-72.436881","CABRERO"],
+  ["EE - SALA CUNA y JARDIN INFANTIL TRENCITO DE MIS SUEÑOS","https://www.google.com/maps/search/?api=1&query=-37.027895,-72.397580","CABRERO"],
+  ["EE - SALA CUNA y JARDIN INFANTIL CAPULLITO DE SOL","https://www.google.com/maps/search/?api=1&query=-37.031756,-72.408090","CABRERO"],
+  ["EE - SALA CUNA ARQUITA DE NOÉ","https://www.google.com/maps/search/?api=1&query=-37.037126,-72.394227","CABRERO"],
+  ["EE - SALA CUNA Y JARDIN INFANTIL RAYITO DE LUZ","https://www.google.com/maps/search/?api=1&query=-37.035058,-72.394260","CABRERO"],
+  ["EE - LICEO MANUEL ARÍSTIDES ZAÑARTU","https://www.google.com/maps/search/?api=1&query=-37.034144,-72.397436","CABRERO"],
+  ["EE - LICEO BICENTENARIO POLITÉCNICO MONTE ÁGUILA","https://www.google.com/maps/search/?api=1&query=-37.083846,-72.436516","CABRERO"],
+  ["EE - ESCUELA SALTO EL LAJA","https://www.google.com/maps/search/?api=1&query=-37.200346,-72.389446","CABRERO"],
+  ["EE - ESCUELA QUINEL","https://www.google.com/maps/search/?api=1&query=-36.923982,-72.495431","CABRERO"],
+  ["EE - ESCUELA EL PROGRESO","https://www.google.com/maps/search/?api=1&query=-37.073543,-72.286695","CABRERO"],
+  ["EE - ESCUELA LOS LEONES","https://www.google.com/maps/search/?api=1&query=-37.008477,-72.493045","CABRERO"],
+  ["EE - ESCUELA LOS CAULLES","https://www.google.com/maps/search/?api=1&query=-36.989548,-72.445749","CABRERO"],
+  ["EE - ESCUELA COLICHEU","https://www.google.com/maps/search/?api=1&query=-37.028876,-72.275239","CABRERO"],
+  ["EE - ESCUELA LOMAS DE ANGOL","https://www.google.com/maps/search/?api=1&query=-36.993887,-72.402403","CABRERO"],
+  ["EE - ESCUELA EL PARAISO","https://www.google.com/maps/search/?api=1&query=-37.204016,-72.354532","CABRERO"],
+  ["EE - ESCUELA EL MANZANO","https://www.google.com/maps/search/?api=1&query=-37.151395,-72.323818","CABRERO"],
+  ["EE - ESCUELA LAS OBRAS","https://www.google.com/maps/search/?api=1&query=-37.080018,-72.509881","CABRERO"],
+  ["EE - ESCUELA PILLANCO","https://www.google.com/maps/search/?api=1&query=-37.151073,-72.350871","CABRERO"],
+  ["EE - ESCUELA CHARRUA","https://www.google.com/maps/search/?api=1&query=-37.101649,-72.323377","CABRERO"],
+  ["EE - ESCUELA ORLANDO VERA VILLARROEL","https://www.google.com/maps/search/?api=1&query=-37.086907,-72.440322","CABRERO"],
+  ["EE - ESCUELA BASICA ENRIQUE ZANARTU PRIETO","https://www.google.com/maps/search/?api=1&query=-37.036769,-72.405102","CABRERO"],
+  ["EE - ESCUELA ALTO CABRERO","https://www.google.com/maps/search/?api=1&query=-37.033002,-72.398901","CABRERO"],
+  ["EE - SALA CUNA y JARDIN INFANTIL DIENTECITOS DE LECHE","https://www.google.com/maps/search/?api=1&query=-37.141434,-72.537240","YUMBEL"],
+  ["EE - SALA CUNA y JARDIN INFANTIL LOS TESORITOS","https://www.google.com/maps/search/?api=1&query=-37.201737,-72.620819","YUMBEL"],
+  ["EE - SALA CUNA y JARDIN INFANTIL RAYITO DE LUZ","https://www.google.com/maps/search/?api=1&query=-37.096542,-72.555687","YUMBEL"],
+  ["EE - LICEO PADRE LUIS ALBERTO SALDES IRARRAZABAL","https://www.google.com/maps/search/?api=1&query=-37.096649,-72.565430","YUMBEL"],
+  ["EE - LICEO MUNICIPAL RIO CLARO","https://www.google.com/maps/search/?api=1&query=-37.197582,-72.622230","YUMBEL"],
+  ["EE - LICEO TÉCNICO PROFESIONAL GONZALO GUGLIELMI MONTIEL","https://www.google.com/maps/search/?api=1&query=-37.142543,-72.538843","YUMBEL"],
+  ["EE - ESCUELA DAVID FERNANDEZ PEREZ","https://www.google.com/maps/search/?api=1&query=-37.089612,-72.562636","YUMBEL"],
+  ["EE - ESCUELA C.E.I.A","https://www.google.com/maps/search/?api=1&query=-37.096658,-72.565167","YUMBEL"],
+  ["EE - ESCUELA MUNICIPAL RERE","https://www.google.com/maps/search/?api=1&query=-37.133837,-72.727103","YUMBEL"],
+  ["EE - ESCUELA HÉROES DE CHILE","https://www.google.com/maps/search/?api=1&query=-37.100716,-72.560265","YUMBEL"],
+  ["EE - ESCUELA ENRIQUE PUFFE KIND","https://www.google.com/maps/search/?api=1&query=-37.208245,-72.434504","YUMBEL"],
+  ["EE - ESCUELA DIEGO PORTALES PALAZUELOS","https://www.google.com/maps/search/?api=1&query=-37.104696,-72.553854","YUMBEL"],
+  ["EE - ESCUELA PADRE PEDRO CAMPOS MENCHACA","https://www.google.com/maps/search/?api=1&query=-36.987731,-72.623672","YUMBEL"]
+];
+
+function getTipo(n) {
+  const u = n.toUpperCase();
+  if (u.includes('SALA CUNA')||u.includes('JARDIN INFANTIL')) return 'sala';
+  if (u.includes('LICEO')) return 'liceo';
+  if (u.includes('ESPECIAL')) return 'especial';
+  return 'escuela';
+}
+const tipoLabel = {sala:'🍼 Sala Cuna / Jardín', liceo:'🎓 Liceo', escuela:'📚 Escuela', especial:'⭐ Esc. Especial'};
+function clean(n) { return n.replace(/^EE[-\s]+/i,'').trim(); }
+function hl(text, q) {
+  if (!q) return text;
+  return text.replace(new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'), '<mark>$1</mark>');
+}
+
+let cComuna='todas', cTipo='todos', cQ='';
+const input=document.getElementById('searchInput');
+const clearBtn=document.getElementById('clearBtn');
+
+input.addEventListener('input',()=>{ cQ=input.value.trim(); clearBtn.classList.toggle('visible',cQ.length>0); render(); });
+function clearSearch(){ input.value=''; cQ=''; clearBtn.classList.remove('visible'); input.focus(); render(); }
+function setComuna(c,el){ cComuna=c; document.querySelectorAll('#filterComuna .chip').forEach(x=>x.classList.remove('active')); el.classList.add('active'); render(); }
+function setTipo(t,el){ cTipo=t; document.querySelectorAll('#filterTipo .chip').forEach(x=>x.classList.remove('active')); el.classList.add('active'); render(); }
+
+function render(){
+  const q = cQ.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  const res = DATA.filter(([nombre,,comuna])=>{
+    const mC = cComuna==='todas'||comuna===cComuna;
+    const mT = cTipo==='todos'||getTipo(nombre)===cTipo;
+    const n  = nombre.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    return mC && mT && (!q||n.includes(q));
+  });
+  document.getElementById('countNum').textContent = res.length;
+  const cont = document.getElementById('listContainer');
+  cont.innerHTML='';
+  document.getElementById('emptyState').classList.toggle('visible', res.length===0);
+  res.forEach(([nombre,link,comuna],i)=>{
+    const tipo=getTipo(nombre);
+    const a=document.createElement('a');
+    a.href=link; a.target='_blank'; a.rel='noopener'; a.className='card';
+    a.style.animationDelay=`${Math.min(i*18,300)}ms`;
+    a.innerHTML=`
+      <div class="card-stripe stripe-${tipo}"></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="card-tipo tipo-${tipo}">${tipoLabel[tipo]}</span>
+          <span class="card-comuna">${comuna}</span>
+        </div>
+        <div class="card-nombre">${hl(clean(nombre),cQ)}</div>
+      </div>
+      <div class="card-arrow"><span class="maps-btn">📍</span></div>`;
+    cont.appendChild(a);
+  });
+}
+render();
+
+// ── PWA: instalar como app ──
+let deferredPrompt = null;
+const banner = document.getElementById('installBanner');
+const installBtn = document.getElementById('installBtn');
+const closeBanner = document.getElementById('closeBanner');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  banner.classList.add('visible');
+});
+
+installBtn.addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  banner.classList.remove('visible');
+});
+
+closeBanner.addEventListener('click', () => {
+  banner.classList.remove('visible');
+});
+
+window.addEventListener('appinstalled', () => {
+  banner.classList.remove('visible');
+});
+
+// Service Worker para funcionar sin internet
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    const CACHE = 'ee-copihues-v1';
+    self.addEventListener('install', e => {
+      e.waitUntil(caches.open(CACHE).then(c => c.addAll(['/'])));
+    });
+    self.addEventListener('fetch', e => {
+      e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
+    });
+  `;
+  const swBlob = new Blob([swCode], {type: 'application/javascript'});
+  const swURL = URL.createObjectURL(swBlob);
+  navigator.serviceWorker.register(swURL).catch(()=>{});
+}
+</script>
+</body>
+</html>
