@@ -205,19 +205,19 @@ document.write('<link rel="manifest" href="' + manifestURL + '">');
 <script>
 // CAMBIO 1: "SALA CUNA y JARDIN INFANTIL" → "SC y JI", "SALA CUNA Y JARDIN INFANTIL" → "SC y JI", "SALA CUNA" solo → "SC"
 const DATA = [
-  ["EE - SC y JI PALACIO DE SUEÑO\nVilla Génesis","https://www.google.com/maps/search/?api=1&query=-37.467012,-72.397520","LOS ANGELES"],
-  ["EE - SC y JI VILLA LOS RIOS\nVilla Los Ríos","https://www.google.com/maps/search/?api=1&query=-37.490474,-72.330926","LOS ANGELES"],
-  ["EE - SC y JI SEMBRANDO SUEÑOS\nLas Tranqueras","https://www.google.com/maps/search/?api=1&query=-37.460239,-72.381745","LOS ANGELES"],
-  ["EE - SC y JI RAICES DE AMOR\nEl Peral","https://www.google.com/maps/search/?api=1&query=-37.484649,-72.212189","LOS ANGELES"],
-  ["EE - SC y JI MANITOS DE AMOR\nEl Nogal","https://www.google.com/maps/search/?api=1&query=-37.411443,-72.309262","LOS ANGELES"],
-  ["EE - SC y JI RINCONCITO DE AMOR\nRinconada Salto","https://www.google.com/maps/search/?api=1&query=-37.217816,-72.352800","LOS ANGELES"],
-  ["EE - SC y JI TREMEMN\nLos Liceos","https://www.google.com/maps/search/?api=1&query=-37.468750,-72.364534","LOS ANGELES"],
-  ["EE - SC y JI PASITOS DE ESPERANZA\nIsla Laja","https://www.google.com/maps/search/?api=1&query=-37.463891,-72.364567","LOS ANGELES"],
-  ["EE - SC y JI ANGELITOS TRAVIESOS\nVirquenco","https://www.google.com/maps/search/?api=1&query=-37.467536,-72.500345","LOS ANGELES"],
-  ["EE - SC y JI KIMELTU\nSanta Fe","https://www.google.com/maps/search/?api=1&query=-37.466623,-72.580045","LOS ANGELES"],
-  ["EE - SC y JI MI GRAN MUNDO\nPaillihue","https://www.google.com/maps/search/?api=1&query=-37.484155,-72.344869","LOS ANGELES"],
-  ["EE - SC y JI GOTITAS DE SUEÑO\nLas Américas","https://www.google.com/maps/search/?api=1&query=-37.488383,-72.334028","LOS ANGELES"],
-  ["EE - SC y JI MI LINDA GRANJA\nLlano Blanco","https://www.google.com/maps/search/?api=1&query=-37.563999,-72.178733","LOS ANGELES"],
+  ["EE - SC y JI PALACIO DE SUEÑO|VILLA GÉNESIS","https://www.google.com/maps/search/?api=1&query=-37.467012,-72.397520","LOS ANGELES"],
+  ["EE - SC y JI VILLA LOS RIOS","https://www.google.com/maps/search/?api=1&query=-37.490474,-72.330926","LOS ANGELES"],
+  ["EE - SC y JI SEMBRANDO SUEÑOS|LAS TRANQUERAS","https://www.google.com/maps/search/?api=1&query=-37.460239,-72.381745","LOS ANGELES"],
+  ["EE - SC y JI RAICES DE AMOR|EL PERAL","https://www.google.com/maps/search/?api=1&query=-37.484649,-72.212189","LOS ANGELES"],
+  ["EE - SC y JI MANITOS DE AMOR|EL NOGAL","https://www.google.com/maps/search/?api=1&query=-37.411443,-72.309262","LOS ANGELES"],
+  ["EE - SC y JI RINCONCITO DE AMOR|RINCONADA SALTO","https://www.google.com/maps/search/?api=1&query=-37.217816,-72.352800","LOS ANGELES"],
+  ["EE - SC y JI TREMEMN|LOS LICEOS","https://www.google.com/maps/search/?api=1&query=-37.468750,-72.364534","LOS ANGELES"],
+  ["EE - SC y JI PASITOS DE ESPERANZA|ISLA LAJA","https://www.google.com/maps/search/?api=1&query=-37.463891,-72.364567","LOS ANGELES"],
+  ["EE - SC y JI ANGELITOS TRAVIESOS|VIRQUENCO","https://www.google.com/maps/search/?api=1&query=-37.467536,-72.500345","LOS ANGELES"],
+  ["EE - SC y JI KIMELTU|SANTA FE","https://www.google.com/maps/search/?api=1&query=-37.466623,-72.580045","LOS ANGELES"],
+  ["EE - SC y JI MI GRAN MUNDO|PAILLIHUE","https://www.google.com/maps/search/?api=1&query=-37.484155,-72.344869","LOS ANGELES"],
+  ["EE - SC y JI GOTITAS DE SUEÑO|LAS AMÉRICAS","https://www.google.com/maps/search/?api=1&query=-37.488383,-72.334028","LOS ANGELES"],
+  ["EE - SC y JI MI LINDA GRANJA|LLANO BLANCO","https://www.google.com/maps/search/?api=1&query=-37.563999,-72.178733","LOS ANGELES"],
   ["EE - LICEO COEDUCACIONAL SANTA MARÍA DE LOS ÁNGELES","https://www.google.com/maps/search/?api=1&query=-37.473093,-72.352048","LOS ANGELES"],
   ["EE - LICEO BICENTENARIO LOS ÁNGELES","https://www.google.com/maps/search/?api=1&query=-37.472906,-72.344141","LOS ANGELES"],
   ["EE - LICEO AGROINDUSTRIAL LLANO BLANCO","https://www.google.com/maps/search/?api=1&query=-37.563743,-72.179083","LOS ANGELES"],
@@ -341,9 +341,9 @@ function render(){
     a.href=link; a.target='_blank'; a.rel='noopener'; a.className='card';
     a.style.animationDelay=`${Math.min(i*18,300)}ms`;
     // Reemplaza \n en el nombre por <br> para mostrar en 2 líneas
-    const partes = clean(nombre).split('\n');
-    const nombrePrincipal = partes[0];
-    const sector = partes[1] ? `<br><span style="font-size:11px;font-weight:500;color:var(--gris);">${partes[1].toUpperCase()}</span>` : '';
+    const partes = clean(nombre).split('|');
+    const nombrePrincipal = partes[0].replace(/\n/g, '<br>');
+    const sector = partes[1] ? `<br><span style="font-size:11px;font-weight:500;color:var(--gris);">${partes[1]}</span>` : '';
     const nombreMostrar = hl(nombrePrincipal, cQ) + sector;
     a.innerHTML=`
       <div class="card-stripe stripe-${tipo}"></div>
