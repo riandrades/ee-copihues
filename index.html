@@ -107,7 +107,7 @@ document.write('<link rel="manifest" href="' + manifestURL + '">');
   .stripe-sala    { background:#9b59b6; }
   .stripe-liceo   { background:var(--acento); }
   .stripe-escuela { background:var(--celeste); }
-  .stripe-especial{ background:#e74c3c; }
+  .stripe-especial{ background:var(--celeste); }
 
   .card-body { flex:1; padding:12px 14px; min-width:0; }
   .card-meta { display:flex; align-items:center; gap:6px; margin-bottom:3px; flex-wrap:wrap; }
@@ -115,7 +115,7 @@ document.write('<link rel="manifest" href="' + manifestURL + '">');
   .tipo-sala    { color:#9b59b6; }
   .tipo-liceo   { color:var(--acento2); }
   .tipo-escuela { color:var(--celeste); }
-  .tipo-especial{ color:#e74c3c; }
+  .tipo-especial{ color:var(--celeste); }
   .card-comuna { font-family:'Outfit',sans-serif; font-size:9.5px; font-weight:700; text-transform:uppercase; background:#eaf4ec; color:#1e8449; padding:2px 7px; border-radius:10px; }
 
   /* CAMBIO 2: nombre del card en 2 líneas si es largo */
@@ -183,7 +183,6 @@ document.write('<link rel="manifest" href="' + manifestURL + '">');
       <button class="chip" onclick="setTipo('sala',this)">🍼 SC / JI</button>
       <button class="chip" onclick="setTipo('liceo',this)">🎓 Liceos</button>
       <button class="chip" onclick="setTipo('escuela',this)">📚 Escuelas</button>
-      <button class="chip" onclick="setTipo('especial',this)">⭐ Especial</button>
     </div>
   </div>
 </div>
@@ -289,26 +288,25 @@ const DATA = [
   ["EE - SC y JI DIENTECITOS DE LECHE","https://www.google.com/maps/search/?api=1&query=-37.141434,-72.537240","YUMBEL"],
   ["EE - SC y JI LOS TESORITOS","https://www.google.com/maps/search/?api=1&query=-37.201737,-72.620819","YUMBEL"],
   ["EE - SC y JI RAYITO DE LUZ","https://www.google.com/maps/search/?api=1&query=-37.096542,-72.555687","YUMBEL"],
-  ["EE - LICEO PADRE\nLUIS ALBERTO SALDES IRARRAZABAL","https://www.google.com/maps/search/?api=1&query=-37.096649,-72.565430","YUMBEL"],
+  ["EE - LICEO PADRE LUIS ALBERTO SALDES IRARRAZABAL","https://www.google.com/maps/search/?api=1&query=-37.096649,-72.565430","YUMBEL"],
   ["EE - LICEO MUNICIPAL RIO CLARO","https://www.google.com/maps/search/?api=1&query=-37.197582,-72.622230","YUMBEL"],
-  ["EE - LICEO TÉCNICO PROFESIONAL\nGONZALO GUGLIELMI MONTIEL","https://www.google.com/maps/search/?api=1&query=-37.142543,-72.538843","YUMBEL"],
+  ["EE - LICEO TÉCNICO PROFESIONAL GONZALO GUGLIELMI MONTIEL","https://www.google.com/maps/search/?api=1&query=-37.142543,-72.538843","YUMBEL"],
   ["EE - ESCUELA DAVID FERNANDEZ PEREZ","https://www.google.com/maps/search/?api=1&query=-37.089612,-72.562636","YUMBEL"],
   ["EE - ESCUELA C.E.I.A","https://www.google.com/maps/search/?api=1&query=-37.096658,-72.565167","YUMBEL"],
   ["EE - ESCUELA MUNICIPAL RERE","https://www.google.com/maps/search/?api=1&query=-37.133837,-72.727103","YUMBEL"],
   ["EE - ESCUELA HÉROES DE CHILE","https://www.google.com/maps/search/?api=1&query=-37.100716,-72.560265","YUMBEL"],
   ["EE - ESCUELA ENRIQUE PUFFE KIND","https://www.google.com/maps/search/?api=1&query=-37.208245,-72.434504","YUMBEL"],
   ["EE - ESCUELA DIEGO PORTALES PALAZUELOS","https://www.google.com/maps/search/?api=1&query=-37.104696,-72.553854","YUMBEL"],
-  ["EE - ESCUELA PADRE\nPEDRO CAMPOS MENCHACA","https://www.google.com/maps/search/?api=1&query=-36.987731,-72.623672","YUMBEL"]
+  ["EE - ESCUELA PADRE PEDRO CAMPOS MENCHACA","https://www.google.com/maps/search/?api=1&query=-36.987731,-72.623672","YUMBEL"]
 ];
 
 function getTipo(n) {
   const u = n.toUpperCase();
   if (u.includes('SC Y JI')||u.includes('SC y JI')||u.includes('SALA CUNA')||u.includes('JARDIN INFANTIL')) return 'sala';
   if (u.includes('LICEO')) return 'liceo';
-  if (u.includes('ESPECIAL')) return 'especial';
   return 'escuela';
 }
-const tipoLabel = {sala:'🍼 SC / JI', liceo:'🎓 Liceo', escuela:'📚 Escuela', especial:'⭐ Esc. Especial'};
+const tipoLabel = {sala:'🍼 SC / JI', liceo:'🎓 Liceo', escuela:'📚 Escuela'};
 function clean(n) { return n.replace(/^EE[-\s]+/i,'').trim(); }
 function hl(text, q) {
   if (!q) return text;
