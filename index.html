@@ -151,7 +151,7 @@ document.write('<link rel="manifest" href="' + manifestURL + '">');
   .nv-card { background:var(--blanco); border-radius:12px; box-shadow:0 1px 6px rgba(10,61,98,0.06); display:flex; align-items:stretch; overflow:hidden; text-decoration:none; color:var(--texto); opacity:0.82; }
   .nv-stripe { width:4px; flex-shrink:0; background:#95a5a6; }
   .nv-body { flex:1; padding:10px 12px; min-width:0; }
-  .nv-nombre { font-family:'Outfit',sans-serif; font-size:12.5px; font-weight:600; color:#555; line-height:1.3; }
+  .nv-nombre { font-family:'Outfit',sans-serif; font-size:12.5px; font-weight:700; color:#2c3e50; line-height:1.3; }
   .nv-comuna { font-family:'Outfit',sans-serif; font-size:10px; font-weight:700; text-transform:uppercase; color:#999; margin-top:3px; }
   .nv-arrow { display:flex; align-items:center; justify-content:center; padding:0 12px 0 6px; flex-shrink:0; }
   .nv-maps-btn { background:linear-gradient(135deg,#95a5a6,#7f8c8d); color:white; border:none; border-radius:8px; width:32px; height:32px; display:flex; align-items:center; justify-content:center; font-size:16px; cursor:pointer; text-decoration:none; }
@@ -231,7 +231,7 @@ document.write('<link rel="manifest" href="' + manifestURL + '">');
 
 <!-- Sección NO VIGENTES -->
 <div id="secNoVigente" style="display:none;">
-  <div class="nv-header">⚠️ Establecimientos sin actividad vigente · Solo referencia<br><span style="font-size:10px;font-weight:500;color:#bbb;letter-spacing:0.3px;">LOS ÁNGELES: 21 &nbsp;·&nbsp; CABRERO: 3 &nbsp;·&nbsp; YUMBEL: 4</span></div>
+  <div class="nv-header">⚠️ Establecimientos sin actividad vigente<br><span style="font-size:10.5px;font-weight:700;color:#888;letter-spacing:0.5px;">LOS ÁNGELES: 21 &nbsp;·&nbsp; CABRERO: 3 &nbsp;·&nbsp; YUMBEL: 4</span></div>
   <div class="nv-container visible" id="nvContainer"></div>
 </div>
 
@@ -270,7 +270,7 @@ const DATA = [
   ["EE - ESCUELA BASICA COYANCO","https://www.google.com/maps/search/?api=1&query=-37.494306,-72.533614","LOS ANGELES"],
   ["EE - ESCUELA BÁSICA LA RINCONADA DEL SALTO","https://www.google.com/maps/search/?api=1&query=-37.217538,-72.353156","LOS ANGELES"],
   ["EE - ESCUELA DIEGO PORTALES PALAZUELOS","https://www.google.com/maps/search/?api=1&query=-37.484747,-72.214345","LOS ANGELES"],
-  ["EE - ESCUELA BASICA MILLANTU","https://www.google.com/maps/search/?api=1&query=-37.397574,-72.619739","LOS ANGELES"],
+  ["EE - ESCUELA BASICA MILLANTU","https://www.google.com/maps/search/?api=1&query=-37.39753854608932,-72.62122114536925","LOS ANGELES"],
   ["EE - ESCUELA BASICA LOS TRONCOS","https://www.google.com/maps/search/?api=1&query=-37.276648,-72.427344","LOS ANGELES"],
   ["EE - ESCUELA BASICA VIRQUENCO","https://www.google.com/maps/search/?api=1&query=-37.467472,-72.499517","LOS ANGELES"],
   ["EE - ESCUELA BASICA LA AGUADA DE CUEL","https://www.google.com/maps/search/?api=1&query=-37.519650,-72.500650","LOS ANGELES"],
@@ -314,7 +314,7 @@ const DATA = [
   ["EE - ESCUELA COLICHEU","https://www.google.com/maps/search/?api=1&query=-37.028876,-72.275239","CABRERO"],
   ["EE - ESCUELA LOMAS DE ANGOL","https://www.google.com/maps/search/?api=1&query=-36.993887,-72.402403","CABRERO"],
   ["EE - ESCUELA EL PARAISO","https://www.google.com/maps/search/?api=1&query=-37.204016,-72.354532","CABRERO"],
-  ["EE - ESCUELA EL MANZANO","https://www.google.com/maps/search/?api=1&query=-37.151395,-72.323818","CABRERO"],
+  ["EE - ESCUELA EL MANZANO","https://www.google.com/maps/search/?api=1&query=-37.15633267414722,-72.28476550604469","CABRERO"],
   ["EE - ESCUELA LAS OBRAS","https://www.google.com/maps/search/?api=1&query=-37.080018,-72.509881","CABRERO"],
   ["EE - ESCUELA PILLANCO","https://www.google.com/maps/search/?api=1&query=-37.151073,-72.350871","CABRERO"],
   ["EE - ESCUELA CHARRUA","https://www.google.com/maps/search/?api=1&query=-37.101649,-72.323377","CABRERO"],
@@ -327,7 +327,7 @@ const DATA = [
   ["EE - LICEO PADRE LUIS ALBERTO SALDES IRARRAZABAL","https://www.google.com/maps/search/?api=1&query=-37.096649,-72.565430","YUMBEL"],
   ["EE - LICEO MUNICIPAL RIO CLARO","https://www.google.com/maps/search/?api=1&query=-37.197582,-72.622230","YUMBEL"],
   ["EE - LICEO TÉCNICO PROFESIONAL GONZALO GUGLIELMI MONTIEL","https://www.google.com/maps/search/?api=1&query=-37.142543,-72.538843","YUMBEL"],
-  ["EE - ESCUELA DAVID FERNANDEZ PEREZ","https://www.google.com/maps/search/?api=1&query=-37.089612,-72.562636","YUMBEL"],
+  ["EE - ESCUELA DAVID FERNANDEZ PEREZ|CÁRCEL","https://www.google.com/maps/search/?api=1&query=-37.089612,-72.562636","YUMBEL"],
   ["EE - ESCUELA C.E.I.A","https://www.google.com/maps/search/?api=1&query=-37.096658,-72.565167","YUMBEL"],
   ["EE - ESCUELA MUNICIPAL RERE","https://www.google.com/maps/search/?api=1&query=-37.133837,-72.727103","YUMBEL"],
   ["EE - ESCUELA HÉROES DE CHILE","https://www.google.com/maps/search/?api=1&query=-37.100716,-72.560265","YUMBEL"],
@@ -416,8 +416,8 @@ const DATA_NV = [
   ["ESCUELA PATAHUECO","-37.32497,-72.12300","LOS ANGELES"],
   ["ESCUELA DUQUECO CUEL","-37.56472,-72.53480","LOS ANGELES"],
   ["ESCUELA LA MONTAÑA","-37.46660,-72.62118","LOS ANGELES"],
-  ["ESCUELA SANTA MATILDE","-37.46292,-72.31199","LOS ANGELES"],
-  ["ESCUELA SAN JOSE DE BIO BIO","-37.56406,-72.32660","LOS ANGELES"],
+  ["ESCUELA SANTA MATILDE|BODEGA DAEM","-37.46292,-72.31199","LOS ANGELES"],
+  ["ESCUELA ADULTOS BIO BIO|CÁRCEL","-37.48118,-72.35532","LOS ANGELES"],
   ["ESCUELA LOS OLMOS","-37.07803,-72.37738","CABRERO"],
   ["ESCUELA LOS CANELOS","-36.95119,-72.46401","CABRERO"],
   ["ESCUELA HACIENDA MONTE AGUILA","-37.11165,-72.44153","CABRERO"],
@@ -430,16 +430,32 @@ const DATA_NV = [
 function renderNV() {
   const cont = document.getElementById('nvContainer');
   cont.innerHTML = '';
-  DATA_NV.forEach(([nombre, coords, comuna]) => {
+  let comunaActual = '';
+  DATA_NV.forEach(([nombreRaw, coords, comuna]) => {
+    // Divisor entre comunas
+    if (comunaActual && comunaActual !== comuna) {
+      const div = document.createElement('div');
+      div.style.cssText = 'height:1px;background:#dde1e7;margin:6px 0;';
+      cont.appendChild(div);
+    }
+    comunaActual = comuna;
+
     const [lat, lon] = coords.split(',');
     const link = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
+    const partes = nombreRaw.split('|');
+    const nombre = partes[0];
+    const sub = partes[1] ? `<br><span style="font-size:11px;font-weight:600;color:#791F1F;">${partes[1]}</span>` : '';
+    const bgCard = partes[1] && partes[1].includes('BODEGA') ? 'background:#F7C1C1; border:1px solid #F09595;' : 'background:white;';
+    const colorNombre = partes[1] && partes[1].includes('BODEGA') ? '#501313' : '#2c3e50';
+    const colorComuna = partes[1] && partes[1].includes('BODEGA') ? '#791F1F' : '#999';
     const a = document.createElement('a');
     a.href = link; a.target = '_blank'; a.rel = 'noopener'; a.className = 'nv-card';
+    a.style.cssText = bgCard;
     a.innerHTML = `
       <div class="nv-stripe"></div>
       <div class="nv-body">
-        <div class="nv-nombre">${nombre}</div>
-        <div class="nv-comuna">📍 ${comuna}</div>
+        <div class="nv-nombre" style="color:${colorNombre};">${nombre}${sub}</div>
+        <div class="nv-comuna" style="color:${colorComuna};">📍 ${comuna}</div>
       </div>
       <div class="nv-arrow"><span class="nv-maps-btn">📍</span></div>`;
     cont.appendChild(a);
@@ -468,36 +484,4 @@ window.addEventListener('beforeinstallprompt', (e) => {
 });
 
 installBtn.addEventListener('click', async () => {
-  if (!deferredPrompt) return;
-  deferredPrompt.prompt();
-  const { outcome } = await deferredPrompt.userChoice;
-  deferredPrompt = null;
-  banner.classList.remove('visible');
-});
-
-closeBanner.addEventListener('click', () => {
-  banner.classList.remove('visible');
-});
-
-window.addEventListener('appinstalled', () => {
-  banner.classList.remove('visible');
-});
-
-// Service Worker para funcionar sin internet
-if ('serviceWorker' in navigator) {
-  const swCode = `
-    const CACHE = 'ee-copihues-v1';
-    self.addEventListener('install', e => {
-      e.waitUntil(caches.open(CACHE).then(c => c.addAll(['/'])));
-    });
-    self.addEventListener('fetch', e => {
-      e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
-    });
-  `;
-  const swBlob = new Blob([swCode], {type: 'application/javascript'});
-  const swURL = URL.createObjectURL(swBlob);
-  navigator.serviceWorker.register(swURL).catch(()=>{});
-}
-</script>
-</body>
-</html>
+  if (!deferredPr
