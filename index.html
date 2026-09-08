@@ -137,6 +137,25 @@ document.write('<link rel="manifest" href="' + manifestURL + '">');
   .empty p { font-size:13px; color:var(--gris); }
 
   .bottom-bar { position:fixed; bottom:0; left:0; right:0; background:rgba(255,255,255,0.95); backdrop-filter:blur(10px); border-top:1px solid var(--gris-claro); padding:10px 20px; text-align:center; font-size:11px; color:var(--gris); font-family:'Outfit',sans-serif; font-weight:500; }
+
+  /* Pestañas */
+  .tabs { display:flex; gap:0; margin:14px 16px 0; border-radius:12px; overflow:hidden; border:2px solid var(--gris-claro); }
+  .tab-btn { flex:1; padding:9px 6px; font-family:'Outfit',sans-serif; font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px; border:none; cursor:pointer; background:var(--fondo); color:var(--gris); transition:all 0.2s; }
+  .tab-btn.active { background:var(--azul); color:white; }
+  .tab-btn.nv { font-size:10.5px; color:#999; }
+  .tab-btn.nv.active { background:#7f8c8d; color:white; }
+
+  /* Sección no vigentes */
+  .nv-container { padding:4px 16px 100px; display:none; flex-direction:column; gap:8px; }
+  .nv-container.visible { display:flex; }
+  .nv-card { background:var(--blanco); border-radius:12px; box-shadow:0 1px 6px rgba(10,61,98,0.06); display:flex; align-items:stretch; overflow:hidden; text-decoration:none; color:var(--texto); opacity:0.82; }
+  .nv-stripe { width:4px; flex-shrink:0; background:#95a5a6; }
+  .nv-body { flex:1; padding:10px 12px; min-width:0; }
+  .nv-nombre { font-family:'Outfit',sans-serif; font-size:12.5px; font-weight:600; color:#555; line-height:1.3; }
+  .nv-comuna { font-family:'Outfit',sans-serif; font-size:10px; font-weight:700; text-transform:uppercase; color:#999; margin-top:3px; }
+  .nv-arrow { display:flex; align-items:center; justify-content:center; padding:0 12px 0 6px; flex-shrink:0; }
+  .nv-maps-btn { background:linear-gradient(135deg,#95a5a6,#7f8c8d); color:white; border:none; border-radius:8px; width:32px; height:32px; display:flex; align-items:center; justify-content:center; font-size:16px; cursor:pointer; text-decoration:none; }
+  .nv-header { padding:10px 16px 4px; font-family:'Outfit',sans-serif; font-size:11px; color:#aaa; font-weight:600; text-transform:uppercase; letter-spacing:0.8px; }
   mark { background:rgba(243,156,18,0.25); color:inherit; border-radius:3px; padding:0 1px; }
 </style>
 </head>
@@ -168,6 +187,14 @@ document.write('<link rel="manifest" href="' + manifestURL + '">');
   </div>
 </div>
 
+<!-- Pestañas -->
+<div class="tabs">
+  <button class="tab-btn active" id="tabVigente" onclick="switchTab('vigente')">🏫 Establecimientos</button>
+  <button class="tab-btn nv" id="tabNoVigente" onclick="switchTab('novigente')">📁 No Vigentes</button>
+</div>
+
+<!-- Contenido vigentes -->
+<div id="secVigente">
 <div class="filtros-section">
   <div class="filtros-titulo">📍 Filtrar por comuna</div>
   <div class="filter-row" id="filterComuna">
@@ -200,6 +227,14 @@ document.write('<link rel="manifest" href="' + manifestURL + '">');
   <h3>Sin resultados</h3>
   <p>Intenta con otro nombre o cambia los filtros</p>
 </div>
+</div><!-- /secVigente -->
+
+<!-- Sección NO VIGENTES -->
+<div id="secNoVigente" style="display:none;">
+  <div class="nv-header">⚠️ Establecimientos sin actividad vigente · Solo referencia<br><span style="font-size:10px;font-weight:500;color:#bbb;letter-spacing:0.3px;">LOS ÁNGELES: 21 &nbsp;·&nbsp; CABRERO: 3 &nbsp;·&nbsp; YUMBEL: 4</span></div>
+  <div class="nv-container visible" id="nvContainer"></div>
+</div>
+
 <div class="bottom-bar">📍 Los links abren Google Maps directamente</div>
 
 <script>
@@ -235,7 +270,7 @@ const DATA = [
   ["EE - ESCUELA BASICA COYANCO","https://www.google.com/maps/search/?api=1&query=-37.494306,-72.533614","LOS ANGELES"],
   ["EE - ESCUELA BÁSICA LA RINCONADA DEL SALTO","https://www.google.com/maps/search/?api=1&query=-37.217538,-72.353156","LOS ANGELES"],
   ["EE - ESCUELA DIEGO PORTALES PALAZUELOS","https://www.google.com/maps/search/?api=1&query=-37.484747,-72.214345","LOS ANGELES"],
-  ["EE - ESCUELA BASICA MILLANTU","https://www.google.com/maps/search/?api=1&query=-37.3975385,-72.6212211","LOS ANGELES"],
+  ["EE - ESCUELA BASICA MILLANTU","https://www.google.com/maps/search/?api=1&query=-37.397574,-72.619739","LOS ANGELES"],
   ["EE - ESCUELA BASICA LOS TRONCOS","https://www.google.com/maps/search/?api=1&query=-37.276648,-72.427344","LOS ANGELES"],
   ["EE - ESCUELA BASICA VIRQUENCO","https://www.google.com/maps/search/?api=1&query=-37.467472,-72.499517","LOS ANGELES"],
   ["EE - ESCUELA BASICA LA AGUADA DE CUEL","https://www.google.com/maps/search/?api=1&query=-37.519650,-72.500650","LOS ANGELES"],
@@ -267,7 +302,7 @@ const DATA = [
   ["EE - SC y JI PEQUEÑOS ANGELITOS","https://www.google.com/maps/search/?api=1&query=-37.083259,-72.436881","CABRERO"],
   ["EE - SC y JI TRENCITO DE MIS SUEÑOS","https://www.google.com/maps/search/?api=1&query=-37.027895,-72.397580","CABRERO"],
   ["EE - SC y JI CAPULLITO DE SOL","https://www.google.com/maps/search/?api=1&query=-37.031756,-72.408090","CABRERO"],
-  ["EE - SC y JI ARQUITA DE NOÉ","https://www.google.com/maps/search/?api=1&query=-37.037126,-72.394227","CABRERO"],
+  ["EE - SC ARQUITA DE NOÉ","https://www.google.com/maps/search/?api=1&query=-37.037126,-72.394227","CABRERO"],
   ["EE - SC y JI RAYITO DE LUZ","https://www.google.com/maps/search/?api=1&query=-37.035058,-72.394260","CABRERO"],
   ["EE - LICEO MANUEL ARÍSTIDES ZAÑARTU","https://www.google.com/maps/search/?api=1&query=-37.034144,-72.397436","CABRERO"],
   ["EE - LICEO BICENTENARIO\nPOLITÉCNICO MONTE ÁGUILA","https://www.google.com/maps/search/?api=1&query=-37.083846,-72.436516","CABRERO"],
@@ -279,7 +314,7 @@ const DATA = [
   ["EE - ESCUELA COLICHEU","https://www.google.com/maps/search/?api=1&query=-37.028876,-72.275239","CABRERO"],
   ["EE - ESCUELA LOMAS DE ANGOL","https://www.google.com/maps/search/?api=1&query=-36.993887,-72.402403","CABRERO"],
   ["EE - ESCUELA EL PARAISO","https://www.google.com/maps/search/?api=1&query=-37.204016,-72.354532","CABRERO"],
-  ["EE - ESCUELA EL MANZANO","https://www.google.com/maps/search/?api=1&query=-37.1563229951,-72.2848330999","CABRERO"],
+  ["EE - ESCUELA EL MANZANO","https://www.google.com/maps/search/?api=1&query=-37.151395,-72.323818","CABRERO"],
   ["EE - ESCUELA LAS OBRAS","https://www.google.com/maps/search/?api=1&query=-37.080018,-72.509881","CABRERO"],
   ["EE - ESCUELA PILLANCO","https://www.google.com/maps/search/?api=1&query=-37.151073,-72.350871","CABRERO"],
   ["EE - ESCUELA CHARRUA","https://www.google.com/maps/search/?api=1&query=-37.101649,-72.323377","CABRERO"],
@@ -292,13 +327,13 @@ const DATA = [
   ["EE - LICEO PADRE LUIS ALBERTO SALDES IRARRAZABAL","https://www.google.com/maps/search/?api=1&query=-37.096649,-72.565430","YUMBEL"],
   ["EE - LICEO MUNICIPAL RIO CLARO","https://www.google.com/maps/search/?api=1&query=-37.197582,-72.622230","YUMBEL"],
   ["EE - LICEO TÉCNICO PROFESIONAL GONZALO GUGLIELMI MONTIEL","https://www.google.com/maps/search/?api=1&query=-37.142543,-72.538843","YUMBEL"],
-  ["EE - ESCUELA DAVID FERNANDEZ PEREZ|CÁRCEL","https://www.google.com/maps/search/?api=1&query=-37.089612,-72.562636","YUMBEL"],
+  ["EE - ESCUELA DAVID FERNANDEZ PEREZ","https://www.google.com/maps/search/?api=1&query=-37.089612,-72.562636","YUMBEL"],
   ["EE - ESCUELA C.E.I.A","https://www.google.com/maps/search/?api=1&query=-37.096658,-72.565167","YUMBEL"],
   ["EE - ESCUELA MUNICIPAL RERE","https://www.google.com/maps/search/?api=1&query=-37.133837,-72.727103","YUMBEL"],
   ["EE - ESCUELA HÉROES DE CHILE","https://www.google.com/maps/search/?api=1&query=-37.100716,-72.560265","YUMBEL"],
   ["EE - ESCUELA ENRIQUE PUFFE KIND","https://www.google.com/maps/search/?api=1&query=-37.208245,-72.434504","YUMBEL"],
   ["EE - ESCUELA DIEGO PORTALES PALAZUELOS","https://www.google.com/maps/search/?api=1&query=-37.104696,-72.553854","YUMBEL"],
-  ["EE - ESCUELA PADRE PEDRO CAMPOS MENCHACA|TOMECO","https://www.google.com/maps/search/?api=1&query=-36.987731,-72.623672","YUMBEL"]
+  ["EE - ESCUELA PADRE PEDRO CAMPOS MENCHACA","https://www.google.com/maps/search/?api=1&query=-36.987731,-72.623672","YUMBEL"]
 ];
 
 function getTipo(n) {
@@ -359,6 +394,66 @@ function render(){
   });
 }
 render();
+
+// ── NO VIGENTES ──
+const DATA_NV = [
+  ["ESCUELA BASICA EL PORVENIR","-37.44272,-72.59012","LOS ANGELES"],
+  ["ESCUELA SANTA MARGARITA","-37.55044,-72.36976","LOS ANGELES"],
+  ["ESCUELA SANTA MARTA","-37.40994,-72.53465","LOS ANGELES"],
+  ["ESCUELA EL LITRE","-37.22546,-72.40214","LOS ANGELES"],
+  ["SALA CUNA UNIVERSITARIA","-37.47257,-72.34573","LOS ANGELES"],
+  ["ESCUELA ARRAYÁN","-37.48241,-72.42359","LOS ANGELES"],
+  ["ESCUELA HARAS DEL LAJA","-37.30820,-72.41880","LOS ANGELES"],
+  ["ESCUELA LAS VEGAS DE RARINCO","-37.40898,-72.40676","LOS ANGELES"],
+  ["ESCUELA EL OLIVO","-37.33735,-72.35066","LOS ANGELES"],
+  ["ESCUELA DARIO BARRUETO MOLINET","-37.35967,-72.37262","LOS ANGELES"],
+  ["ESCUELA EL ROSAL","-37.26654,-72.35407","LOS ANGELES"],
+  ["ESCUELA LA PURISIMA","-37.32093,-72.26349","LOS ANGELES"],
+  ["ESCUELA FUNDO LUANCO","-37.26733,-72.25897","LOS ANGELES"],
+  ["ESCUELA SECTOR PARAGUAY","-37.20350,-72.23613","LOS ANGELES"],
+  ["ESCUELA SAN GERARDO","-37.38324,-72.21302","LOS ANGELES"],
+  ["ESCUELA EL DURAZNO","-37.35552,-72.16294","LOS ANGELES"],
+  ["ESCUELA PATAHUECO","-37.32497,-72.12300","LOS ANGELES"],
+  ["ESCUELA DUQUECO CUEL","-37.56472,-72.53480","LOS ANGELES"],
+  ["ESCUELA LA MONTAÑA","-37.46660,-72.62118","LOS ANGELES"],
+  ["ESCUELA SANTA MATILDE","-37.46292,-72.31199","LOS ANGELES"],
+  ["ESCUELA SAN JOSE DE BIO BIO","-37.56406,-72.32660","LOS ANGELES"],
+  ["ESCUELA LOS OLMOS","-37.07803,-72.37738","CABRERO"],
+  ["ESCUELA LOS CANELOS","-36.95119,-72.46401","CABRERO"],
+  ["ESCUELA HACIENDA MONTE AGUILA","-37.11165,-72.44153","CABRERO"],
+  ["ESCUELA LA CANCHILLA","-36.95377,-72.52801","YUMBEL"],
+  ["ESCUELA CERRO PARRA","-37.15088,-72.60487","YUMBEL"],
+  ["ESCUELA LAS NIEVES","-37.06700,-72.57894","YUMBEL"],
+  ["ESCUELA CAMBRALES","-37.05083,-72.53285","YUMBEL"],
+];
+
+function renderNV() {
+  const cont = document.getElementById('nvContainer');
+  cont.innerHTML = '';
+  DATA_NV.forEach(([nombre, coords, comuna]) => {
+    const [lat, lon] = coords.split(',');
+    const link = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`;
+    const a = document.createElement('a');
+    a.href = link; a.target = '_blank'; a.rel = 'noopener'; a.className = 'nv-card';
+    a.innerHTML = `
+      <div class="nv-stripe"></div>
+      <div class="nv-body">
+        <div class="nv-nombre">${nombre}</div>
+        <div class="nv-comuna">📍 ${comuna}</div>
+      </div>
+      <div class="nv-arrow"><span class="nv-maps-btn">📍</span></div>`;
+    cont.appendChild(a);
+  });
+}
+renderNV();
+
+function switchTab(tab) {
+  const esVigente = tab === 'vigente';
+  document.getElementById('secVigente').style.display = esVigente ? '' : 'none';
+  document.getElementById('secNoVigente').style.display = esVigente ? 'none' : '';
+  document.getElementById('tabVigente').classList.toggle('active', esVigente);
+  document.getElementById('tabNoVigente').classList.toggle('active', !esVigente);
+}
 
 // ── PWA: instalar como app ──
 let deferredPrompt = null;
